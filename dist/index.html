@@ -1,20 +1,48 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <title>Ejercicio Objetos</title>
+</head>
+<body>
+    <button id="registrarBtn">Registrar Datos</button>
+    <button id="mostrarBtn">Mostrar Datos</button>
+    <div id="resultado"></div>
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
+    <script>
+        function Persona(nombre, apellido, edad) {
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.edad = edad;
+        }
 
-    <title>The HTML5 Herald</title>
-    <meta name="description" content="The HTML5 Herald" />
-    <meta name="author" content="SitePoint" />
+        Persona.prototype.mostrarInfo = function() {
+            return `Nombre: ${this.nombre}, Apellido: ${this.apellido}, Edad: ${this.edad}`;
+        }
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0" />
-  </head>
+        var personas = [];
 
-  
-  <body>
-    <h1>Hello World</h1>
-    <h2>This is a test page</h2>
-    <script src="js/scripts.js"></script>
-  </body>
+        function registrarDatos() {
+            var nombre = prompt("Ingrese su nombre:");
+            var apellido = prompt("Ingrese su apellido:");
+            var edad = prompt("Ingrese su edad:");
+
+            var persona = new Persona(nombre, apellido, edad);
+            personas.push(persona);
+        }
+
+        function mostrarDatos() {
+            var resultadoHTML = "<h2>Información Registrada:</h2><ul>";
+
+            for (var i = 0; i < personas.length; i++) {
+                resultadoHTML += "<li>" + personas[i].mostrarInfo() + "</li>";
+            }
+
+            resultadoHTML += "</ul>";
+            document.getElementById("resultado").innerHTML = resultadoHTML;
+        }
+
+        document.getElementById("registrarBtn").addEventListener("click", registrarDatos);
+        document.getElementById("mostrarBtn").addEventListener("click", mostrarDatos);
+    </script>
+</body>
 </html>
