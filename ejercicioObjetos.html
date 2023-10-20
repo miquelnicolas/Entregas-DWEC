@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejercicio Objetos</title>
+</head>
+<body>
+    <button id="registrarBtn">Registrar Datos</button>
+    <button id="mostrarBtn">Mostrar Datos</button>
+    <div id="resultado"></div>
+    <button id="volverBtn" style="position: fixed; bottom: 10px; left: 10px;">Volver a Entregas DWEC</button>
+
+    <script>
+        function Persona(nombre, apellido, edad) {
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.edad = edad;
+        }
+
+        Persona.prototype.mostrarInfo = function() {
+            return `Nombre: ${this.nombre}, Apellido: ${this.apellido}, Edad: ${this.edad}`;
+        }
+
+        var personas = [];
+
+        function registrarDatos() {
+            var nombre = prompt("Ingrese su nombre:");
+            var apellido = prompt("Ingrese su apellido:");
+            var edad = prompt("Ingrese su edad:");
+
+            var persona = new Persona(nombre, apellido, edad);
+            personas.push(persona);
+        }
+
+        function mostrarDatos() {
+            var resultadoHTML = "<h2>Información Registrada:</h2><ul>";
+
+            for (var i = 0; i < personas.length; i++) {
+                resultadoHTML += "<li>" + personas[i].mostrarInfo() + "</li>";
+            }
+
+            resultadoHTML += "</ul>";
+            document.getElementById("resultado").innerHTML = resultadoHTML;
+        }
+
+        document.getElementById("volverBtn").addEventListener("click", function() {
+            window.location.href = "index.html";
+        });
+
+        document.getElementById("registrarBtn").addEventListener("click", registrarDatos);
+        document.getElementById("mostrarBtn").addEventListener("click", mostrarDatos);
+    </script>
+</body>
+</html>
