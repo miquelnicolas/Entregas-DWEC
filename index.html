@@ -4,45 +4,9 @@
     <title>Entregas DWEC</title>
 </head>
 <body>
-    <button id="registrarBtn">Registrar Datos</button>
-    <button id="mostrarBtn">Mostrar Datos</button>
-    <div id="resultado"></div>
-
-    <script>
-        function Persona(nombre, apellido, edad) {
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.edad = edad;
-        }
-
-        Persona.prototype.mostrarInfo = function() {
-            return `Nombre: ${this.nombre}, Apellido: ${this.apellido}, Edad: ${this.edad}`;
-        }
-
-        var personas = [];
-
-        function registrarDatos() {
-            var nombre = prompt("Ingrese su nombre:");
-            var apellido = prompt("Ingrese su apellido:");
-            var edad = prompt("Ingrese su edad:");
-
-            var persona = new Persona(nombre, apellido, edad);
-            personas.push(persona);
-        }
-
-        function mostrarDatos() {
-            var resultadoHTML = "<h2>Información Registrada:</h2><ul>";
-
-            for (var i = 0; i < personas.length; i++) {
-                resultadoHTML += "<li>" + personas[i].mostrarInfo() + "</li>";
-            }
-
-            resultadoHTML += "</ul>";
-            document.getElementById("resultado").innerHTML = resultadoHTML;
-        }
-
-        document.getElementById("registrarBtn").addEventListener("click", registrarDatos);
-        document.getElementById("mostrarBtn").addEventListener("click", mostrarDatos);
-    </script>
+    <h1>Entregas DWEC</h1>
+    <ul>
+        <li><a href="ejercicioObjetos.html">Ejercicio Objetos</a></li>
+    </ul>
 </body>
 </html>
