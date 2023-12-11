@@ -13,19 +13,25 @@
     
     <h2>To Do List 3</h2>
 
-        <div>
-            <input type="text" id="taskInput" placeholder="Agregar una tarea">
-            <button onclick="addTask()">Agregar</button>
-        </div>
-        <div>
-            <input type="text" id="filterInput" placeholder="Filtrar tareas" oninput="filterTasks()">
-        </div>
-        <div>
-            <ul id="taskList">
-            </ul>
-        </div>
+    <div>
+        <input type="text" id="taskInput" placeholder="Agregar una tarea">
+        <button onclick="addTask()">Agregar</button>
+    </div>
+    <div>
+        <input type="text" id="filterInput" placeholder="Filtrar tareas" oninput="filterTasks()">
+    </div>
+    <div>
+        <ul id="taskList"></ul>
+    </div>
 
-        
+    <template id="taskTemplate">
+        <li>
+            <input type="checkbox" class="doneCheckbox" onchange="toggleTaskStatus(this)">
+            <span class="taskText"></span>
+            <button class="deleteButton" style="display: none;" onclick="deleteTask(this)">Eliminar</button>
+        </li>
+    </template>
+
     <script src="js/scripts.js"></script>
 </body>
 </html>

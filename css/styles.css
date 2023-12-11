@@ -1,9 +1,4 @@
-li.done {
-  text-decoration: line-through;
-  color: #888;
-}
-
-button.delete {
+button.deleteButton {
   background-color: #ff3333;
   color: #fff;
   border: none;

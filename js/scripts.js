@@ -40,6 +40,7 @@ document.getElementById("mostrarBtn").addEventListener("click", mostrarDatos);
 const taskInput = document.getElementById("taskInput");
 const filterInput = document.getElementById("filterInput");
 const taskList = document.getElementById("taskList");
+const taskTemplate = document.getElementById("taskTemplate");
 
 function addTask() {
     const taskText = taskInput.value.trim();
@@ -48,8 +49,9 @@ function addTask() {
         alert("Por favor, ingresa una tarea válida.");
         return;
     }
+
     const existingTask = Array.from(taskList.children).find(function (taskItem) {
-        return taskItem.dataset.task.toLowerCase() === taskText.toLowerCase();
+        return taskItem.querySelector('.taskText').textContent.toLowerCase() === taskText.toLowerCase();
     });
 
     if (existingTask) {
@@ -57,42 +59,54 @@ function addTask() {
         return;
     }
 
-    const taskItem = document.createElement("li");
-    taskItem.dataset.task = taskText;
+    const taskItem = document.importNode(taskTemplate.content, true);
+    const doneCheckbox = taskItem.querySelector(".doneCheckbox");
+    const taskTextElement = taskItem.querySelector(".taskText");
 
-    const doneCheckbox = document.createElement("input");
-    doneCheckbox.type = "checkbox";
-    doneCheckbox.onchange = function () {
-        toggleTaskStatus(taskItem, doneCheckbox.checked);
-    };
-
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Eliminar";
-    deleteButton.classList.add("delete");
-    deleteButton.onclick = function () {
-        taskList.removeChild(taskItem);
-    };
-
-    taskItem.appendChild(doneCheckbox);
-    taskItem.appendChild(document.createTextNode(" "));
-    taskItem.appendChild(document.createTextNode(taskText));
-    taskItem.appendChild(deleteButton);
+    taskTextElement.textContent = taskText;
 
     taskList.appendChild(taskItem);
-
     taskInput.value = "";
 }
 
 function filterTasks() {
     const filterText = filterInput.value.toLowerCase();
+
     Array.from(taskList.children).forEach(function (taskItem) {
-    const taskText = taskItem.innerText.toLowerCase();
-    const deleteButton = taskItem.querySelector(".delete");
-    const taskMatchesFilter = taskText.includes(filterText);
-    taskItem.style.display = taskMatchesFilter ? "block" : "none";
+        const taskText = taskItem.querySelector('.taskText').textContent.toLowerCase();
+        const deleteButton = taskItem.querySelector(".deleteButton");
+        const taskMatchesFilter = taskText.includes(filterText);
+        taskItem.style.display = taskMatchesFilter ? "block" : "none";
     });
 }
 
-function toggleTaskStatus(taskItem, completed) {
-    taskItem.classList.toggle("done", completed);
+function toggleTaskStatus(checkbox) {
+    const taskItem = checkbox.closest('li');
+    const taskTextElement = taskItem.querySelector(".taskText");
+    taskItem.classList.toggle("done", checkbox.checked);
+
+    if (checkbox.checked) {
+        taskTextElement.style.textDecoration = "line-through";
+        taskTextElement.style.color = "blue";
+    } else {
+        taskTextElement.style.textDecoration = "none";
+        taskTextElement.style.color = "";
+    }
+
+    const deleteButton = taskItem.querySelector(".deleteButton");
+
+    if (checkbox.checked) {
+        if (deleteButton) {
+            deleteButton.style.display = "block";
+        }
+    } else {
+        if (deleteButton) {
+            deleteButton.style.display = "none";
+        }
+    }
+}
+
+function deleteTask(button) {
+    const taskItem = button.closest('li');
+    taskList.removeChild(taskItem);
 }
