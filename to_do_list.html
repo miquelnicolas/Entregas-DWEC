@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List - part 2 chat GPT</title>
+    <link rel="stylesheet" href="to_do_list.css">
+</head>
+<body>
+    <h1>To Do List - part 2 chat GPT</h1>
+    <div>
+        <input type="text" id="taskInput" placeholder="Agregar una tarea">
+        <button onclick="addTask()">Agregar</button>
+    </div>
+    <div>
+        <input type="text" id="filterInput" placeholder="Filtrar tareas" oninput="filterTasks()">
+    </div>
+    <div>
+        <ul id="taskList">
+        </ul>
+    </div>
+    <script>
+        const taskInput = document.getElementById("taskInput");
+        const filterInput = document.getElementById("filterInput");
+        const taskList = document.getElementById("taskList");
+
+        function addTask() {
+        const taskText = taskInput.value.trim();
+
+        if (taskText === "") {
+            alert("Por favor, ingresa una tarea válida.");
+            return;
+        }
+        const existingTask = Array.from(taskList.children).find(function (taskItem) {
+            return taskItem.dataset.task.toLowerCase() === taskText.toLowerCase();
+        });
+
+        if (existingTask) {
+            alert("Esta tarea ya está en la lista.");
+            return;
+        }
+
+        const taskItem = document.createElement("li");
+        taskItem.dataset.task = taskText;
+
+        const doneCheckbox = document.createElement("input");
+        doneCheckbox.type = "checkbox";
+        doneCheckbox.onchange = function () {
+            toggleTaskStatus(taskItem, doneCheckbox.checked);
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Eliminar";
+        deleteButton.classList.add("delete");
+        deleteButton.onclick = function () {
+            taskList.removeChild(taskItem);
+        };
+
+        taskItem.appendChild(doneCheckbox);
+        taskItem.appendChild(document.createTextNode(" "));
+        taskItem.appendChild(document.createTextNode(taskText));
+        taskItem.appendChild(deleteButton);
+
+        taskList.appendChild(taskItem);
+
+        taskInput.value = "";
+        }
+
+        function filterTasks() {
+            const filterText = filterInput.value.toLowerCase();
+
+            Array.from(taskList.children).forEach(function (taskItem) {
+            const taskText = taskItem.innerText.toLowerCase();
+            const deleteButton = taskItem.querySelector(".delete");
+            const taskMatchesFilter = taskText.includes(filterText);
+            taskItem.style.display = taskMatchesFilter ? "block" : "none";
+            });
+        }
+
+        function toggleTaskStatus(taskItem, completed) {
+            taskItem.classList.toggle("done", completed);
+        }
+    </script>
+</body>
+</html>

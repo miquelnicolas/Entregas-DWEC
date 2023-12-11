@@ -1,0 +1,13 @@
+li.done {
+    text-decoration: line-through;
+    color: #888;
+}
+
+button.delete {
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
