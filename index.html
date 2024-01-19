@@ -3,6 +3,7 @@
 <head>
     <title>Entregas-DWEC</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <h1>Entregas-DWEC</h1>
@@ -33,27 +34,28 @@
     </template> 
 
     <h2>Juego de Cartas Pokémon</h2>
-
+    
     <label for="numberOfCards">Número de Cartas:</label>
     <input type="number" id="numberOfCards" min="1" value="5">
     <button onclick="startGame()">Mostrar Cartas</button>
 
     <div id="card-container"></div>
 
-    <template id="pokemon-card-template">
-        <div class="pokemon-card">
-            <h3 class="pokemon-name"></h3>
-            <img class="pokemon-image" alt="Pokemon">
-            <p><strong>Type:</strong> <span class="pokemon-type"></span></p>
-            <p><strong>Attack:</strong> <span class="pokemon-attack"></span></p>
-            <p><strong>Defense:</strong> <span class="pokemon-defense"></span></p>
-        </div>
-    </template>
-
     <div id="combat-result">
         <h2>Resultados del Combate</h2>
         <ul id="combat-actions"></ul>
     </div>
+
+    <template id="pokemon-card-template">
+        <div class="pokemon-card">
+            <h3 class="pokemon-name"></h3>
+            <img class="pokemon-image" alt="Pokemon">
+            <p><strong>Tipo:</strong> <span class="pokemon-type"></span></p>
+            <p><strong>Ataque:</strong> <span class="pokemon-attack"></span></p>
+            <p><strong>Defensa:</strong> <span class="pokemon-defense"></span></p>
+        </div>
+    </template>
+
     <script src="js/poke.js"></script>
     <script src="js/scripts.js"></script>
 </body>

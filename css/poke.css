@@ -1,0 +1,57 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #f5f5f5;
+    text-align: center;
+    margin: 0;
+}
+
+h1 {
+    color: #d22630;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pokemon-card {
+    border: 2px solid #d22630;
+    background-color: #fff;
+    margin: 10px;
+    padding: 15px;
+    width: 150px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.pokemon-card:hover {
+    background-color: #f9f9f9;
+    transform: scale(1.1);
+}
+
+.pokemon-card.selected {
+    background-color: #d22630;
+    color: #fff;
+    border: 2px solid #fff;
+    transform: scale(1.05);
+}
+
+#combat-result {
+    margin-top: 20px;
+    color: #d22630;
+}
+
+#combat-actions {
+    list-style-type: none;
+    padding: 0;
+}
+
+#combat-actions li {
+    margin: 10px;
+    color: #555;
+}
