@@ -1,112 +1,87 @@
-//EJERCICIO OBJETOS
+let selectedCards = [];
 
-function Persona(nombre, apellido, edad) {
-    this.nombre = nombre;
-    this.apellido = apellido;
-    this.edad = edad;
-}
+function startGame() {
+    const cardContainer = document.getElementById('card-container');
+    const combatActions = document.getElementById('combat-actions');
+    const numberOfCards = parseInt(document.getElementById('numberOfCards').value);
 
-Persona.prototype.mostrarInfo = function() {
-    return `Nombre: ${this.nombre}, Apellido: ${this.apellido}, Edad: ${this.edad}`;
-}
+    cardContainer.innerHTML = '';
+    combatActions.innerHTML = '';
+    selectedCards = [];
 
-var personas = [];
-
-function registrarDatos() {
-    var nombre = prompt("Ingrese su nombre:");
-    var apellido = prompt("Ingrese su apellido:");
-    var edad = prompt("Ingrese su edad:");
-
-    var persona = new Persona(nombre, apellido, edad);
-    personas.push(persona);
-}
-
-function mostrarDatos() {
-    var resultadoHTML = "<h2>Información Registrada:</h2><ul>";
-
-    for (var i = 0; i < personas.length; i++) {
-        resultadoHTML += "<li>" + personas[i].mostrarInfo() + "</li>";
+    for (let i = 0; i < numberOfCards; i++) {
+        const pokemonId = Math.floor(Math.random() * 100) + 1;
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch Pokemon with ID ${pokemonId}`);
+                }
+                return response.json();
+            })
+            .then(pokemonData => {
+                const card = createPokemonCard(pokemonData);
+                cardContainer.appendChild(card);
+            })
+            .catch(error => console.error(error));
     }
-
-    resultadoHTML += "</ul>";
-    document.getElementById("resultado").innerHTML = resultadoHTML;
 }
 
-document.getElementById("registrarBtn").addEventListener("click", registrarDatos);
-document.getElementById("mostrarBtn").addEventListener("click", mostrarDatos);
+function createPokemonCard(pokemon) {
+    const cardTemplate = document.getElementById('pokemon-card-template');
+    const card = document.createElement('div');
 
-//TO DO LIST 3
+    card.classList.add('pokemon-card');
+    card.innerHTML = cardTemplate.innerHTML;
 
-const taskInput = document.getElementById("taskInput");
-const filterInput = document.getElementById("filterInput");
-const taskList = document.getElementById("taskList");
-const taskTemplate = document.getElementById("taskTemplate");
+    card.querySelector('.pokemon-name').textContent = pokemon.name;
+    card.querySelector('.pokemon-image').src = pokemon.sprites.front_default;
+    card.querySelector('.pokemon-type').textContent = pokemon.types.map(type => type.type.name).join(', ');
+    card.querySelector('.pokemon-attack').textContent = pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat;
+    card.querySelector('.pokemon-defense').textContent = pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat;
 
-function addTask() {
-    const taskText = taskInput.value.trim();
+    card.addEventListener('click', () => handleCardClick(card));
 
-    if (taskText === "") {
-        alert("Por favor, ingresa una tarea válida.");
-        return;
-    }
-
-    const existingTask = Array.from(taskList.children).find(function (taskItem) {
-        return taskItem.querySelector('.taskText').textContent.toLowerCase() === taskText.toLowerCase();
-    });
-
-    if (existingTask) {
-        alert("Esta tarea ya está en la lista.");
-        return;
-    }
-
-    const taskItem = document.importNode(taskTemplate.content, true);
-    const doneCheckbox = taskItem.querySelector(".doneCheckbox");
-    const taskTextElement = taskItem.querySelector(".taskText");
-
-    taskTextElement.textContent = taskText;
-
-    taskList.appendChild(taskItem);
-    taskInput.value = "";
+    return card;
 }
 
-function filterTasks() {
-    const filterText = filterInput.value.toLowerCase();
+function handleCardClick(card) {
+    if (!card.classList.contains('selected')) {
+        card.classList.add('selected');
+        selectedCards.push(card);
 
-    Array.from(taskList.children).forEach(function (taskItem) {
-        const taskText = taskItem.querySelector('.taskText').textContent.toLowerCase();
-        const deleteButton = taskItem.querySelector(".deleteButton");
-        const taskMatchesFilter = taskText.includes(filterText);
-        taskItem.style.display = taskMatchesFilter ? "block" : "none";
-    });
-}
-
-function toggleTaskStatus(checkbox) {
-    const taskItem = checkbox.closest('li');
-    const taskTextElement = taskItem.querySelector(".taskText");
-    taskItem.classList.toggle("done", checkbox.checked);
-
-    if (checkbox.checked) {
-        taskTextElement.style.textDecoration = "line-through";
-        taskTextElement.style.color = "blue";
-    } else {
-        taskTextElement.style.textDecoration = "none";
-        taskTextElement.style.color = "";
-    }
-
-    const deleteButton = taskItem.querySelector(".deleteButton");
-
-    if (checkbox.checked) {
-        if (deleteButton) {
-            deleteButton.style.display = "block";
+        if (selectedCards.length === 2) {
+            handleCombat();
         }
     } else {
-        if (deleteButton) {
-            deleteButton.style.display = "none";
-        }
+        card.classList.remove('selected');
+        selectedCards = selectedCards.filter(selectedCard => selectedCard !== card);
     }
 }
 
-function deleteTask(button) {
-    const taskItem = button.closest('li');
-    taskList.removeChild(taskItem);
+function handleCombat() {
+    const attacker = selectedCards[0];
+    const defender = selectedCards[1];
+
+    const attackerName = attacker.querySelector('.pokemon-name').textContent;
+    const defenderName = defender.querySelector('.pokemon-name').textContent;
+    const attackerAttack = parseInt(attacker.querySelector('.pokemon-attack').textContent);
+    const defenderDefense = parseInt(defender.querySelector('.pokemon-defense').textContent);
+
+    let combatResultText = '';
+
+    if (attackerAttack > defenderDefense) {
+        combatResultText = `${attackerName} (Atacante) gana contra ${defenderName} (Defensor)`;
+    } else if (attackerAttack < defenderDefense) {
+        combatResultText = `${defenderName} (Defensor) gana contra ${attackerName} (Atacante)`;
+    } else {
+        combatResultText = 'Combate entre ' + attackerName + ' (Atacante) y ' + defenderName + ' (Defensor) termina en empate';
+    }
+
+    const resultItem = document.createElement('li');
+    resultItem.textContent = combatResultText;
+
+    document.getElementById('combat-actions').appendChild(resultItem);
+
+    selectedCards.forEach(card => card.classList.remove('selected'));
+    selectedCards = [];
 }
